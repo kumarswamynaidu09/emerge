@@ -182,11 +182,6 @@ def build_footer() -> Text:
     )
 
     footer.append(
-        "emerge --help",
-        style="bold #FF8A33",
-    )
-
-    footer.append(
         " " * 28,
     )
 
