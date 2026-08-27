@@ -1,0 +1,4 @@
+name = "Basic Web Project"
+slug = "basic-web"
+category = "web"
+description = "A minimal web project."
