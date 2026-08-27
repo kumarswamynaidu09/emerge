@@ -177,12 +177,7 @@ def build_footer() -> Text:
     footer = Text()
 
     footer.append(
-        "› ",
-        style="bold #FF6500",
-    )
-
-    footer.append(
-        " " * 28,
+        " " * 32,
     )
 
     footer.append(
