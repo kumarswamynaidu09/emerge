@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -7,32 +8,16 @@ class Template:
     slug: str
     category: str
     description: str
+    path: str
 
 
 TEMPLATES = [
     Template(
-        name="Web",
-        slug="web",
+        name="Basic Web Project",
+        slug="web-basic",
         category="web",
-        description="Web application projects",
-    ),
-    Template(
-        name="Data / ML",
-        slug="data",
-        category="data",
-        description="Data science and machine learning projects",
-    ),
-    Template(
-        name="Mobile",
-        slug="mobile",
-        category="mobile",
-        description="Mobile application projects",
-    ),
-    Template(
-        name="CLI",
-        slug="cli",
-        category="cli",
-        description="Command-line application projects",
+        description="A minimal web project.",
+        path="web/basic",
     ),
 ]
 
@@ -53,3 +38,11 @@ def list_templates() -> list[Template]:
     """Return all available templates."""
 
     return TEMPLATES
+
+
+def get_template_path(template: Template) -> Path:
+    """Return the filesystem path of a template."""
+
+    project_root = Path(__file__).resolve().parents[3]
+
+    return project_root / "templates" / template.path

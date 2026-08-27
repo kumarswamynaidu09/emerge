@@ -4,46 +4,35 @@ import typer
 from rich.console import Console
 
 from emerge.core.generator import ProjectGenerator
-from emerge.core.registry import get_template
+from emerge.core.registry import get_template, get_template_path
 
 console = Console()
 
 
-TEMPLATE_ROOT = Path(__file__).resolve().parents[3] / "templates"
-
-
 def create(
-    project_type: str = typer.Argument(
+    template_slug: str = typer.Argument(
         ...,
-        help="Type of project to create.",
+        help="Template to use.",
     ),
     name: str = typer.Argument(
         ...,
         help="Name of the project.",
     ),
 ):
-    """Create a new Emerge project."""
+    """Create a new project from a template."""
 
-    template = get_template(project_type)
+    template = get_template(template_slug)
 
     if template is None:
         console.print(
-            f"[bold red]Unknown project type:[/bold red] {project_type}"
+            f"[bold red]Unknown template:[/bold red] {template_slug}"
         )
         console.print(
-            "[bold]Available:[/bold] web, data, mobile, cli"
+            "[bold]Available:[/bold] web-basic"
         )
         raise typer.Exit(code=1)
 
-    if template.slug == "web":
-        template_path = TEMPLATE_ROOT / "web" / "basic"
-    else:
-        console.print(
-            f"[yellow]No generator template exists yet for "
-            f"{template.name}.[/yellow]"
-        )
-        raise typer.Exit(code=1)
-
+    template_path = get_template_path(template)
     output_path = Path.cwd() / name
 
     if output_path.exists():
@@ -59,7 +48,7 @@ def create(
     console.print()
 
     console.print(f"[bold]Creating:[/bold] {name}")
-    console.print(f"[bold]Type:[/bold] {template.name}")
+    console.print(f"[bold]Template:[/bold] {template.name}")
     console.print()
 
     generator = ProjectGenerator(template_path)
