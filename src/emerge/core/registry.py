@@ -10,7 +10,6 @@ class Template:
     description: str
     path: str
 
-
 TEMPLATES = [
     Template(
         name="Basic Web Project",
@@ -18,6 +17,27 @@ TEMPLATES = [
         category="web",
         description="A minimal web project.",
         path="web/basic",
+    ),
+    Template(
+        name="Basic Data / ML Project",
+        slug="data-basic",
+        category="data",
+        description="A minimal data and machine learning project.",
+        path="data/basic",
+    ),
+    Template(
+        name="Basic Mobile Project",
+        slug="mobile-basic",
+        category="mobile",
+        description="A minimal mobile project.",
+        path="mobile/basic",
+    ),
+    Template(
+        name="Basic CLI Project",
+        slug="cli-basic",
+        category="cli",
+        description="A minimal command-line project.",
+        path="cli/basic",
     ),
 ]
 

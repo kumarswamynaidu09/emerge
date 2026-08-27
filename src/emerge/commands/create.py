@@ -6,33 +6,34 @@ from rich.console import Console
 from emerge.core.generator import ProjectGenerator
 from emerge.core.registry import get_template, get_template_path
 
+
 console = Console()
 
 
 def create(
-    template_slug: str = typer.Argument(
+    project_type: str = typer.Argument(
         ...,
-        help="Template to use.",
+        help="Type of project to create.",
     ),
     name: str = typer.Argument(
         ...,
         help="Name of the project.",
     ),
 ):
-    """Create a new project from a template."""
+    """Create a new project."""
 
+    template_slug = f"{project_type}-basic"
     template = get_template(template_slug)
 
     if template is None:
         console.print(
-            f"[bold red]Unknown template:[/bold red] {template_slug}"
+            f"[bold red]Unknown project type:[/bold red] {project_type}"
         )
         console.print(
-            "[bold]Available:[/bold] web-basic"
+            "[bold]Available types:[/bold] web"
         )
         raise typer.Exit(code=1)
 
-    template_path = get_template_path(template)
     output_path = Path.cwd() / name
 
     if output_path.exists():
@@ -42,13 +43,12 @@ def create(
         )
         raise typer.Exit(code=1)
 
-    console.print()
-    console.print("[bold #FF6B00]EMERGE[/bold #FF6B00]")
-    console.print("From idea to project.")
-    console.print()
+    template_path = get_template_path(template)
 
-    console.print(f"[bold]Creating:[/bold] {name}")
-    console.print(f"[bold]Template:[/bold] {template.name}")
+    console.print()
+    console.print(
+        f"[bold #FF6500]Creating {project_type} project...[/bold #FF6500]"
+    )
     console.print()
 
     generator = ProjectGenerator(template_path)
@@ -61,7 +61,7 @@ def create(
     )
 
     console.print(
-        "[bold #FF6B00]✓ Project emerged successfully![/bold #FF6B00]"
+        "[bold #FF6500]✓ Project emerged successfully![/bold #FF6500]"
     )
     console.print()
     console.print(f"  cd {name}")

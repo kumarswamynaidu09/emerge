@@ -63,13 +63,13 @@ def build_logo() -> Group:
     logo_lines = []
 
     for line, color in zip(LINES, LOGO_COLORS):
-        text = Text(
-            line,
-            style=f"bold {color}",
+        logo_lines.append(
+            Text(
+                line,
+                style=f"bold {color}",
+            )
         )
-        logo_lines.append(text)
 
-    # Small separation before tagline.
     logo_lines.append(Text(" "))
 
     logo_lines.append(
@@ -171,21 +171,25 @@ def build_categories() -> Group:
     return Group(*content)
 
 
-def build_footer() -> Text:
-    """Build the bottom command prompt."""
+def build_footer() -> Group:
+    """Build the version and attribution footer."""
 
-    footer = Text()
-
-    footer.append(
-        " " * 32,
-    )
-
-    footer.append(
+    version = Text(
         "v0.1.0",
         style="#777777",
+        justify="center",
     )
 
-    return footer
+    attribution = Text(
+        "Inspired by Spawn",
+        style="bold #94B8D9",
+        justify="center",
+    )
+
+    return Group(
+        version,
+        attribution,
+    )
 
 
 def show_banner() -> None:
