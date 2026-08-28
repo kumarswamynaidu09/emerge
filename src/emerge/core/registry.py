@@ -2,96 +2,178 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-@dataclass(frozen=True)
-class Framework:
-    name: str
-    slug: str
-    category: str
-    command: str
-
+# ─────────────────────────────────────────────
+# Template
+# ─────────────────────────────────────────────
 
 @dataclass(frozen=True)
 class Template:
     name: str
     slug: str
     category: str
-    framework: str
     description: str
     path: str
 
 
-FRAMEWORKS = [
-    Framework(
-        name="React",
-        slug="react",
-        category="web",
-        command="npm create vite@latest {name} -- --template react --no-interactive --no-immediate",
-    ),
-    Framework(
-        name="Next.js",
-        slug="nextjs",
-        category="web",
-        command="npx create-next-app@latest {name}",
-    ),
-    Framework(
-        name="Vue",
-        slug="vue",
-        category="web",
-        command="npm create vue@latest {name}",
-    ),
-    Framework(
-        name="Angular",
-        slug="angular",
-        category="web",
-        command="npx @angular/cli@latest new {name}",
-    ),
-    Framework(
-        name="SvelteKit",
-        slug="sveltekit",
-        category="web",
-        command="npx sv create {name}",
-    ),
-]
+# ─────────────────────────────────────────────
+# Framework
+# ─────────────────────────────────────────────
 
+@dataclass(frozen=True)
+class Framework:
+    name: str
+    slug: str
+    category: str
+    description: str
+    command: str
+    package_managers: tuple[str, ...]
+
+
+# ─────────────────────────────────────────────
+# Templates
+# ─────────────────────────────────────────────
 
 TEMPLATES = [
     Template(
         name="Basic Web Project",
         slug="web-basic",
         category="web",
-        framework="vanilla",
         description="A minimal web project.",
         path="web/basic",
+    ),
+
+    Template(
+        name="Basic Data / ML Project",
+        slug="data-basic",
+        category="data",
+        description="A minimal data and machine learning project.",
+        path="data/basic",
+    ),
+
+    Template(
+        name="Basic Mobile Project",
+        slug="mobile-basic",
+        category="mobile",
+        description="A minimal mobile project.",
+        path="mobile/basic",
+    ),
+
+    Template(
+        name="Basic CLI Project",
+        slug="cli-basic",
+        category="cli",
+        description="A minimal command-line project.",
+        path="cli/basic",
     ),
 ]
 
 
-def get_framework(slug: str) -> Framework | None:
-    """Find a framework by its slug."""
+# ─────────────────────────────────────────────
+# Frameworks
+# ─────────────────────────────────────────────
 
-    slug = slug.lower()
+FRAMEWORKS = [
+    # ─────────────────────────────────────────
+    # Web
+    # ─────────────────────────────────────────
 
-    for framework in FRAMEWORKS:
-        if framework.slug == slug:
-            return framework
+    Framework(
+        name="React",
+        slug="react",
+        category="web",
+        description="React application powered by Vite.",
+        command=(
+            "npm create vite@latest {name} "
+            "-- --template react "
+            "--no-interactive "
+            "--no-immediate"
+        ),
+        package_managers=(
+            "npm",
+            "pnpm",
+            "yarn",
+            "bun",
+        ),
+    ),
 
-    return None
+    Framework(
+        name="Next.js",
+        slug="nextjs",
+        category="web",
+        description="Full-stack React framework.",
+        command=(
+            "npx create-next-app@latest {name}"
+            " --no-install"
+            " --eslint"
+            " --src-dir"
+            " --app"
+        ),
+        package_managers=(
+            "npm",
+            "pnpm",
+            "yarn",
+            "bun",
+        ),
+    ),
+
+    Framework(
+        name="Vue",
+        slug="vue",
+        category="web",
+        description="Progressive JavaScript framework.",
+        command=(
+            "npm create vue@latest {name}"
+        ),
+        package_managers=(
+            "npm",
+            "pnpm",
+            "yarn",
+            "bun",
+        ),
+    ),
+
+    Framework(
+        name="Angular",
+        slug="angular",
+        category="web",
+        description="Full-featured web application framework.",
+        command=(
+            "npx @angular/cli@latest new {name}"
+            " --routing"
+            " --style=css"
+        ),
+        package_managers=(
+            "npm",
+            "pnpm",
+            "yarn",
+            "bun",
+        ),
+    ),
+
+    Framework(
+        name="SvelteKit",
+        slug="sveltekit",
+        category="web",
+        description="Svelte framework for building modern web applications.",
+        command=(
+            "npx sv create {name}"
+        ),
+        package_managers=(
+            "npm",
+            "pnpm",
+            "yarn",
+            "bun",
+        ),
+    ),
+]
 
 
-def get_frameworks_by_category(category: str) -> list[Framework]:
-    """Return frameworks available for a category."""
-
-    category = category.lower()
-
-    return [
-        framework
-        for framework in FRAMEWORKS
-        if framework.category == category
-    ]
-
+# ─────────────────────────────────────────────
+# Template Functions
+# ─────────────────────────────────────────────
 
 def get_template(slug: str) -> Template | None:
-    """Find a template by its slug."""
+    """Find a template by slug."""
 
     slug = slug.lower()
 
@@ -100,18 +182,6 @@ def get_template(slug: str) -> Template | None:
             return template
 
     return None
-
-
-def get_templates_by_category(category: str) -> list[Template]:
-    """Return templates available for a category."""
-
-    category = category.lower()
-
-    return [
-        template
-        for template in TEMPLATES
-        if template.category == category
-    ]
 
 
 def list_templates() -> list[Template]:
@@ -126,3 +196,39 @@ def get_template_path(template: Template) -> Path:
     project_root = Path(__file__).resolve().parents[3]
 
     return project_root / "templates" / template.path
+
+
+# ─────────────────────────────────────────────
+# Framework Functions
+# ─────────────────────────────────────────────
+
+def get_framework(slug: str) -> Framework | None:
+    """Find a framework by slug."""
+
+    slug = slug.lower()
+
+    for framework in FRAMEWORKS:
+        if framework.slug == slug:
+            return framework
+
+    return None
+
+
+def get_frameworks_by_category(
+    category: str,
+) -> list[Framework]:
+    """Return frameworks belonging to a category."""
+
+    category = category.lower()
+
+    return [
+        framework
+        for framework in FRAMEWORKS
+        if framework.category == category
+    ]
+
+
+def list_frameworks() -> list[Framework]:
+    """Return all available frameworks."""
+
+    return FRAMEWORKS
